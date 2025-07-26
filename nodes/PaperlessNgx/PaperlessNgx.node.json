@@ -1,0 +1,20 @@
+{
+	"node": "n8n-nodes-base.PaperlessNGX",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": [
+		"Miscellaneous"
+	],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://docs.paperless-ngx.com/api/"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://docs.paperless-ngx.com/"
+			}
+		]
+	}
+}
