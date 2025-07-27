@@ -1,8 +1,8 @@
 import type { INodeProperties } from 'n8n-workflow';
 import { paginationOptions } from './options';
-import { correspondentExpressions } from './utils';
+import { documentTypeExpressions } from './utils';
 
-export const correspondentOperations: INodeProperties[] = [
+export const documentTypeOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
@@ -10,19 +10,19 @@ export const correspondentOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['documentType'],
 			},
 		},
 		options: [
 			{
 				name: 'Create',
-				value: 'createCorrespondent',
-				action: 'Create a correspondent',
+				value: 'createDocumentType',
+				action: 'Create a document type',
 				routing: {
 					request: {
 						method: 'POST',
-						url: '/correspondents/',
-						body: correspondentExpressions.body,
+						url: '/document_types/',
+						body: documentTypeExpressions.body,
 						encoding: 'json',
 						json: true,
 					},
@@ -30,47 +30,47 @@ export const correspondentOperations: INodeProperties[] = [
 			},
 			{
 				name: 'Delete',
-				value: 'deleteCorrespondent',
-				action: 'Delete a correspondent',
+				value: 'deleteDocumentType',
+				action: 'Delete a document type',
 				routing: {
 					request: {
 						method: 'DELETE',
-						url: '=/correspondents/{{$parameter.id}}/',
+						url: '=/document_types/{{$parameter.id}}/',
 					},
 				},
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				action: 'Get all correspondents',
+				action: 'Get all document types',
 				routing: {
 					request: {
 						method: 'GET',
-						url: '/correspondents/',
-						qs: correspondentExpressions.query,
+						url: '/document_types/',
+						qs: documentTypeExpressions.query,
 					},
 				},
 			},
 			{
 				name: 'Get by ID',
-				value: 'getCorrespondentById',
-				action: 'Get correspondent by id',
+				value: 'getDocumentTypeById',
+				action: 'Get document type by id',
 				routing: {
 					request: {
 						method: 'GET',
-						url: '=/correspondents/{{$parameter.id}}/',
+						url: '=/document_types/{{$parameter.id}}/',
 					},
 				},
 			},
 			{
 				name: 'Update',
-				value: 'updateCorrespondent',
-				action: 'Update a correspondent replace all fields',
+				value: 'updateDocumentType',
+				action: 'Update a document type replace all fields',
 				routing: {
 					request: {
 						method: 'PUT',
-						url: '=/correspondents/{{$parameter.id}}/',
-						body: correspondentExpressions.body,
+						url: '=/document_types/{{$parameter.id}}/',
+						body: documentTypeExpressions.body,
 						encoding: 'json',
 						json: true,
 					},
@@ -78,13 +78,13 @@ export const correspondentOperations: INodeProperties[] = [
 			},
 			{
 				name: 'Partial Update',
-				value: 'partialUpdateCorrespondent',
-				action: 'Partially update a correspondent update specific fields',
+				value: 'partialUpdateDocumentType',
+				action: 'Partially update a document type update specific fields',
 				routing: {
 					request: {
 						method: 'PATCH',
-						url: '=/correspondents/{{$parameter.id}}/',
-						body: correspondentExpressions.body,
+						url: '=/document_types/{{$parameter.id}}/',
+						body: documentTypeExpressions.body,
 						encoding: 'json',
 						json: true,
 					},
@@ -96,7 +96,7 @@ export const correspondentOperations: INodeProperties[] = [
 	// Include pagination options for the get operation
 	...paginationOptions,
 
-	// Parameters for Create Correspondent operation
+	// Parameters for Create Document Type operation
 	{
 		displayName: 'Name',
 		name: 'name',
@@ -104,12 +104,12 @@ export const correspondentOperations: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['createCorrespondent', 'updateCorrespondent'],
+				resource: ['documentType'],
+				operation: ['createDocumentType', 'updateDocumentType'],
 			},
 		},
 		default: '',
-		description: 'The name of the correspondent',
+		description: 'The name of the document type',
 	},
 	{
 		displayName: 'Name',
@@ -117,12 +117,12 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['partialUpdateCorrespondent'],
+				resource: ['documentType'],
+				operation: ['partialUpdateDocumentType'],
 			},
 		},
 		default: undefined,
-		description: 'The name of the correspondent (optional for partial update)',
+		description: 'The name of the document type (optional for partial update)',
 	},
 	{
 		displayName: 'Match',
@@ -130,13 +130,13 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['createCorrespondent', 'updateCorrespondent', 'partialUpdateCorrespondent'],
+				resource: ['documentType'],
+				operation: ['createDocumentType', 'updateDocumentType', 'partialUpdateDocumentType'],
 			},
 		},
 		default: undefined,
 		description:
-			'A string that paperless will try to match against the content of documents to automatically assign this correspondent',
+			'A string that paperless will try to match against the content of documents to automatically assign this document type',
 	},
 	{
 		displayName: 'Matching Algorithm',
@@ -144,15 +144,15 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'options',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['createCorrespondent', 'updateCorrespondent', 'partialUpdateCorrespondent'],
+				resource: ['documentType'],
+				operation: ['createDocumentType', 'updateDocumentType', 'partialUpdateDocumentType'],
 			},
 		},
 		options: [
 			{
 				name: 'None',
 				value: 0,
-				description: 'Do not match documents to this correspondent automatically',
+				description: 'Do not match documents to this document type automatically',
 			},
 			{
 				name: 'Any',
@@ -186,7 +186,7 @@ export const correspondentOperations: INodeProperties[] = [
 			},
 		],
 		default: 0,
-		description: 'The algorithm used to match documents to this correspondent',
+		description: 'The algorithm used to match documents to this document type',
 	},
 	{
 		displayName: 'Case Insensitive',
@@ -194,8 +194,8 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'boolean',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['createCorrespondent', 'updateCorrespondent', 'partialUpdateCorrespondent'],
+				resource: ['documentType'],
+				operation: ['createDocumentType', 'updateDocumentType', 'partialUpdateDocumentType'],
 			},
 		},
 		default: false,
@@ -204,34 +204,34 @@ export const correspondentOperations: INodeProperties[] = [
 
 	// Parameter for primary ID
 	{
-		displayName: 'Correspondent ID',
+		displayName: 'Document Type ID',
 		name: 'id',
 		type: 'number',
 		required: true,
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['documentType'],
 				operation: [
-					'deleteCorrespondent',
-					'getCorrespondentById',
-					'updateCorrespondent',
-					'partialUpdateCorrespondent',
+					'deleteDocumentType',
+					'getDocumentTypeById',
+					'updateDocumentType',
+					'partialUpdateDocumentType',
 					'get',
 				],
 			},
 		},
 		default: 0,
-		description: 'The ID of the correspondent to delete, get, or update',
+		description: 'The ID of the document type to delete, get, or update',
 	},
 
-	// Filtering Parameters for Get All Correspondents operation
+	// Filtering Parameters for Get All Document Types operation
 	{
 		displayName: 'Full Permissions',
 		name: 'fullPerms',
 		type: 'boolean',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['documentType'],
 				operation: ['get'],
 			},
 		},
@@ -244,12 +244,12 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['documentType'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents by multiple IDs (comma-separated)',
+		description: 'Filter document types by multiple IDs (comma-separated)',
 	},
 	{
 		displayName: 'Name Contains',
@@ -257,12 +257,12 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['documentType'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents where name contains this text (case-insensitive)',
+		description: 'Filter document types where name contains this text (case-insensitive)',
 	},
 	{
 		displayName: 'Name Ends With',
@@ -270,12 +270,12 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['documentType'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents where name ends with this text (case-insensitive)',
+		description: 'Filter document types where name ends with this text (case-insensitive)',
 	},
 	{
 		displayName: 'Name Exact Match',
@@ -283,12 +283,12 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['documentType'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents where name exactly matches this text (case-insensitive)',
+		description: 'Filter document types where name exactly matches this text (case-insensitive)',
 	},
 	{
 		displayName: 'Name Starts With',
@@ -296,11 +296,11 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['documentType'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents where name starts with this text (case-insensitive)',
+		description: 'Filter document types where name starts with this text (case-insensitive)',
 	},
 ];

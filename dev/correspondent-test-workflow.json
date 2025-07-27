@@ -1,0 +1,313 @@
+{
+  "name": "Correspondent Test",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Test",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -608,
+        -16
+      ],
+      "id": "3410b401-883a-485e-86db-d9d674d36e99",
+      "name": "On form submission",
+      "webhookId": "ae9d0995-e620-4516-b1ad-82b0492f74f1"
+    },
+    {
+      "parameters": {
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        -16
+      ],
+      "id": "5c8fb8b6-5bac-4364-8c7d-549c935c5e3a",
+      "name": "Get all correspondents",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "createCorrespondent",
+        "name": "={{ $('On form submission').item.json.Name }}",
+        "matchingAlgorithm": 0,
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        -16
+      ],
+      "id": "c5b35a32-23e6-4e99-94a3-1958e868631c",
+      "name": "Create a correspondent",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getCorrespondentById",
+        "id": "={{ $json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        32,
+        176
+      ],
+      "id": "dac12e7d-34df-4e85-81af-e94dd7992136",
+      "name": "Get correspondent by id",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "nameContains": "es",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        32,
+        -16
+      ],
+      "id": "dc1a6acd-555d-4bb2-a30c-40cf8e2d9778",
+      "name": "Filter by Name",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "893f7a8c-a280-40e8-80b7-53ed8d20776f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "partialUpdateCorrespondent",
+        "match": "Match Test",
+        "matchingAlgorithm": 2,
+        "isInsensitive": false,
+        "id": "={{ $('Create a correspondent').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ],
+      "id": "99640f5b-40a4-4687-9e0f-8fd396a8fffc",
+      "name": "Partially update a correspondent (update specific fields)",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getCorrespondentById",
+        "id": "={{ $('Create a correspondent').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        560,
+        0
+      ],
+      "id": "b07db67c-4e38-4758-a8f7-99568874b46d",
+      "name": "Get correspondent by id1",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "updateCorrespondent",
+        "name": "Test Nmae",
+        "match": "test",
+        "matchingAlgorithm": 1,
+        "isInsensitive": false,
+        "id": "={{ $('Create a correspondent').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        720,
+        0
+      ],
+      "id": "fdf25a67-4752-4e66-bb1b-15aa90134080",
+      "name": "Update a correspondent (replace all fields)",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Name": "Test Name",
+          "submittedAt": "2025-07-26T02:41:01.400-04:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Get all correspondents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all correspondents": {
+      "main": [
+        [
+          {
+            "node": "Create a correspondent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a correspondent": {
+      "main": [
+        [
+          {
+            "node": "Filter by Name",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get correspondent by id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get correspondent by id": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Filter by Name": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Partially update a correspondent (update specific fields)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Partially update a correspondent (update specific fields)": {
+      "main": [
+        [
+          {
+            "node": "Get correspondent by id1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get correspondent by id1": {
+      "main": [
+        [
+          {
+            "node": "Update a correspondent (replace all fields)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a correspondent (replace all fields)": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "693bf85d-e12b-458e-9085-2f67f4da29fa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2bbe6a6701b06c3b222a1456bdb7f254c8c3e2061403cfdf66deefae520e02b2"
+  },
+  "id": "l3zPXIBxQ2ayc3IA",
+  "tags": []
+}

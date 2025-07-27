@@ -1,0 +1,227 @@
+{
+  "name": "Storage Path Test Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Test Storage Path",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Path",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "eaec5021-638a-408c-a80c-486e2d23e4a3",
+      "name": "On form submission",
+      "webhookId": "webhook-id"
+    },
+    {
+      "parameters": {
+        "resource": "storagePath",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b640ecfb-cc36-4633-9465-539953c1a6c7",
+      "name": "Get all storage paths",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "storagePath",
+        "operation": "createStoragePath",
+        "name": "={{ $('On form submission').item.json.Name }}",
+        "path": "={{ $('On form submission').item.json.Path }}",
+        "matchingAlgorithm": 6,
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "9851b042-dd4a-4b39-a434-218b1bcdba88",
+      "name": "Create a storage path",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "storagePath",
+        "operation": "getStoragePathById",
+        "id": "={{ $json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        640,
+        0
+      ],
+      "id": "03dd2496-133a-4989-a198-c517c430fec3",
+      "name": "Get storage path by id",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "storagePath",
+        "operation": "partialUpdateStoragePath",
+        "name": "Updated Storage Path",
+        "path": "{{ created_year }}/{{ tag_list }}/{{ title }}",
+        "match": "test matching",
+        "matchingAlgorithm": 2,
+        "isInsensitive": true,
+        "id": "={{ $('Create a storage path').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        848,
+        0
+      ],
+      "id": "c5510fce-8ab5-4c32-855d-af7d81cc292a",
+      "name": "Partially update storage path",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "storagePath",
+        "operation": "deleteStoragePath",
+        "id": "={{ $('Create a storage path').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        0
+      ],
+      "id": "3a777d67-84c3-4937-8f30-b7bc82879e22",
+      "name": "Delete storage path",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Name": "Test Storage Path",
+          "Path": "{{ created_year }}/{{ correspondent }}/{{ title }}",
+          "submittedAt": "2025-07-27T02:41:01.400-04:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Get all storage paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all storage paths": {
+      "main": [
+        [
+          {
+            "node": "Create a storage path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a storage path": {
+      "main": [
+        [
+          {
+            "node": "Get storage path by id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get storage path by id": {
+      "main": [
+        [
+          {
+            "node": "Partially update storage path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Partially update storage path": {
+      "main": [
+        [
+          {
+            "node": "Delete storage path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "067a3892-a486-4de8-acb6-779063edc8ca",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2bbe6a6701b06c3b222a1456bdb7f254c8c3e2061403cfdf66deefae520e02b2"
+  },
+  "id": "OgJGF2AWi6aedMMe",
+  "tags": []
+}

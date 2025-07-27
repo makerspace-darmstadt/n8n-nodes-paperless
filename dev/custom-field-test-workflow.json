@@ -1,0 +1,297 @@
+{
+  "name": "Custom Field Test",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Test Custom Field",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "DataType",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2f71edf2-ccf7-4f65-ab62-4c8993550c8c",
+      "name": "On form submission",
+      "webhookId": "webhook-id"
+    },
+    {
+      "parameters": {
+        "resource": "customField",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "12cf07a5-a993-40da-99e9-cc22ddb5daaa",
+      "name": "Get all custom fields",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "customField",
+        "operation": "createCustomField",
+        "name": "={{ $('On form submission').item.json.Name }}",
+        "dataType": "={{ $('On form submission').item.json.DataType || 'string' }}",
+        "selectOptions": {
+          "values": []
+        },
+        "extraData": "null",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "1c84a432-a7a9-4ade-a367-437987b8217c",
+      "name": "Create a custom field",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "customField",
+        "operation": "getCustomFieldById",
+        "id": "={{ $json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        640,
+        0
+      ],
+      "id": "408efc30-6db5-46b2-8a12-38a2c93e0ae5",
+      "name": "Get custom field by id",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "customField",
+        "operation": "createCustomField",
+        "name": "Select Field Example",
+        "dataType": "select",
+        "selectOptions": {
+          "values": [
+            {
+              "label": "Test 1"
+            },
+            {
+              "label": "Test 2"
+            }
+          ]
+        },
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        432,
+        192
+      ],
+      "id": "3ad7cc96-ba15-4249-9f36-538e4de34e06",
+      "name": "Create select custom field",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "customField",
+        "operation": "partialUpdateCustomField",
+        "name": "Updated Custom Field",
+        "id": "={{ $('Create a custom field').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        848,
+        0
+      ],
+      "id": "2f0d88c6-e98f-45bd-a99e-de078c5847cf",
+      "name": "Partially update custom field",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "customField",
+        "operation": "deleteCustomField",
+        "id": "={{ $('Create a custom field').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        0
+      ],
+      "id": "18a66c1a-66fb-405e-b5c9-e86698052371",
+      "name": "Delete custom field",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "customField",
+        "operation": "deleteCustomField",
+        "id": "={{ $json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        640,
+        192
+      ],
+      "id": "ca574413-a97d-43ab-b4fb-2845b18fdc15",
+      "name": "Delete a custom field",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Name": "Test Custom Field",
+          "DataType": "string",
+          "submittedAt": "2025-07-27T02:41:01.400-04:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Get all custom fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create select custom field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all custom fields": {
+      "main": [
+        [
+          {
+            "node": "Create a custom field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a custom field": {
+      "main": [
+        [
+          {
+            "node": "Get custom field by id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get custom field by id": {
+      "main": [
+        [
+          {
+            "node": "Partially update custom field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Partially update custom field": {
+      "main": [
+        [
+          {
+            "node": "Delete custom field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create select custom field": {
+      "main": [
+        [
+          {
+            "node": "Delete a custom field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "529a77b8-7620-4ae5-aec9-69594ed96ae5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2bbe6a6701b06c3b222a1456bdb7f254c8c3e2061403cfdf66deefae520e02b2"
+  },
+  "id": "X4Pq73tuBvRRZZ69",
+  "tags": []
+}

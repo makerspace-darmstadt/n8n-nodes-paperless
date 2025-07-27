@@ -1,5 +1,9 @@
 import { INodeType, INodeTypeDescription, NodeConnectionType } from 'n8n-workflow';
 import { correspondentOperations } from './operations/correspondent';
+import { documentTypeOperations } from './operations/documentType';
+import { storagePathOperations } from './operations/storagePath';
+import { tagOperations } from './operations/tag';
+import { customFieldOperations } from './operations/customField';
 
 export class PaperlessNgx implements INodeType {
 	description: INodeTypeDescription = {
@@ -41,10 +45,30 @@ export class PaperlessNgx implements INodeType {
 						name: 'Correspondent',
 						value: 'correspondent',
 					},
+					{
+						name: 'Custom Field',
+						value: 'customField',
+					},
+					{
+						name: 'Document Type',
+						value: 'documentType',
+					},
+					{
+						name: 'Storage Path',
+						value: 'storagePath',
+					},
+					{
+						name: 'Tag',
+						value: 'tag',
+					},
 				],
 				default: 'correspondent',
 			},
 			...correspondentOperations,
+			...documentTypeOperations,
+			...storagePathOperations,
+			...tagOperations,
+			...customFieldOperations,
 		],
 	};
 }

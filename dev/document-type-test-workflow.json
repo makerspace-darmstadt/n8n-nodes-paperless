@@ -1,0 +1,347 @@
+{
+  "name": "Document Type Test",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Test Document Type",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "837c2d12-c214-4e2b-a321-6af34bc65d67",
+      "name": "On form submission",
+      "webhookId": "ae9d0995-e620-4516-b1ad-82b0492f74f1"
+    },
+    {
+      "parameters": {
+        "resource": "documentType",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b2c5061a-746a-4c07-91b9-3c32c2435a63",
+      "name": "Get all document types",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "documentType",
+        "operation": "createDocumentType",
+        "name": "Test",
+        "matchingAlgorithm": 6,
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "47c6fd7d-957f-4a44-9edd-1fc5d380800f",
+      "name": "Create a document type",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "documentType",
+        "id": "={{ $json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        640,
+        192
+      ],
+      "id": "1af48185-fb16-4aa0-8a23-51fe035da4a5",
+      "name": "Get document type by id",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "documentType",
+        "id": null,
+        "nameContains": "es",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        640,
+        0
+      ],
+      "id": "f96226a7-de25-4497-bb71-a818eb6eb47d",
+      "name": "Filter by Name",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        832,
+        16
+      ],
+      "id": "0333e79c-7c71-4a7a-a5ac-039d2768d4a0",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "resource": "documentType",
+        "operation": "partialUpdateDocumentType",
+        "name": "Test New",
+        "matchingAlgorithm": 1,
+        "isInsensitive": true,
+        "id": "={{ $('Create a document type').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        16
+      ],
+      "id": "82fefe7e-09bf-4cfa-9526-6b687d5ee4fe",
+      "name": "Partially update a document type (update specific fields)",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "documentType",
+        "id": "={{ $('Create a document type').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        16
+      ],
+      "id": "050a76c3-5e00-452e-8afd-25e9dc691de1",
+      "name": "Get document type by id1",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "documentType",
+        "operation": "updateDocumentType",
+        "name": "={{ $json.results[0].name }}",
+        "match": "now matching",
+        "matchingAlgorithm": 5,
+        "isInsensitive": true,
+        "id": "={{ $('Create a document type').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        16
+      ],
+      "id": "deba44b9-c03b-4ca2-a922-ad8c326aa7de",
+      "name": "Update a document type (replace all fields)",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "documentType",
+        "operation": "deleteDocumentType",
+        "id": "={{ $('Create a document type').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        16
+      ],
+      "id": "d259e03b-6814-47b7-9ff7-724498cfefa9",
+      "name": "Delete a document type",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Name": "Test Document Type",
+          "submittedAt": "2025-07-26T02:41:01.400-04:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Get all document types",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all document types": {
+      "main": [
+        [
+          {
+            "node": "Create a document type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a document type": {
+      "main": [
+        [
+          {
+            "node": "Filter by Name",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get document type by id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get document type by id": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Filter by Name": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Partially update a document type (update specific fields)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Partially update a document type (update specific fields)": {
+      "main": [
+        [
+          {
+            "node": "Get document type by id1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get document type by id1": {
+      "main": [
+        [
+          {
+            "node": "Update a document type (replace all fields)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a document type (replace all fields)": {
+      "main": [
+        [
+          {
+            "node": "Delete a document type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "559d00ff-2a43-41c8-b273-cfc14d9e3bf9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2bbe6a6701b06c3b222a1456bdb7f254c8c3e2061403cfdf66deefae520e02b2"
+  },
+  "id": "M2ORDSbHsp0HvTkf",
+  "tags": []
+}

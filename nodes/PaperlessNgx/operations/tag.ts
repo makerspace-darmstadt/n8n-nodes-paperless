@@ -1,8 +1,8 @@
 import type { INodeProperties } from 'n8n-workflow';
 import { paginationOptions } from './options';
-import { correspondentExpressions } from './utils';
+import { tagExpressions } from './utils';
 
-export const correspondentOperations: INodeProperties[] = [
+export const tagOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
 		name: 'operation',
@@ -10,19 +10,19 @@ export const correspondentOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['tag'],
 			},
 		},
 		options: [
 			{
 				name: 'Create',
-				value: 'createCorrespondent',
-				action: 'Create a correspondent',
+				value: 'createTag',
+				action: 'Create a tag',
 				routing: {
 					request: {
 						method: 'POST',
-						url: '/correspondents/',
-						body: correspondentExpressions.body,
+						url: '/tags/',
+						body: tagExpressions.body,
 						encoding: 'json',
 						json: true,
 					},
@@ -30,47 +30,47 @@ export const correspondentOperations: INodeProperties[] = [
 			},
 			{
 				name: 'Delete',
-				value: 'deleteCorrespondent',
-				action: 'Delete a correspondent',
+				value: 'deleteTag',
+				action: 'Delete a tag',
 				routing: {
 					request: {
 						method: 'DELETE',
-						url: '=/correspondents/{{$parameter.id}}/',
+						url: '=/tags/{{$parameter.id}}/',
 					},
 				},
 			},
 			{
 				name: 'Get',
 				value: 'get',
-				action: 'Get all correspondents',
+				action: 'Get all tags',
 				routing: {
 					request: {
 						method: 'GET',
-						url: '/correspondents/',
-						qs: correspondentExpressions.query,
+						url: '/tags/',
+						qs: tagExpressions.query,
 					},
 				},
 			},
 			{
 				name: 'Get by ID',
-				value: 'getCorrespondentById',
-				action: 'Get correspondent by id',
+				value: 'getTagById',
+				action: 'Get tag by id',
 				routing: {
 					request: {
 						method: 'GET',
-						url: '=/correspondents/{{$parameter.id}}/',
+						url: '=/tags/{{$parameter.id}}/',
 					},
 				},
 			},
 			{
 				name: 'Update',
-				value: 'updateCorrespondent',
-				action: 'Update a correspondent replace all fields',
+				value: 'updateTag',
+				action: 'Update a tag replace all fields',
 				routing: {
 					request: {
 						method: 'PUT',
-						url: '=/correspondents/{{$parameter.id}}/',
-						body: correspondentExpressions.body,
+						url: '=/tags/{{$parameter.id}}/',
+						body: tagExpressions.body,
 						encoding: 'json',
 						json: true,
 					},
@@ -78,13 +78,13 @@ export const correspondentOperations: INodeProperties[] = [
 			},
 			{
 				name: 'Partial Update',
-				value: 'partialUpdateCorrespondent',
-				action: 'Partially update a correspondent update specific fields',
+				value: 'partialUpdateTag',
+				action: 'Partially update a tag update specific fields',
 				routing: {
 					request: {
 						method: 'PATCH',
-						url: '=/correspondents/{{$parameter.id}}/',
-						body: correspondentExpressions.body,
+						url: '=/tags/{{$parameter.id}}/',
+						body: tagExpressions.body,
 						encoding: 'json',
 						json: true,
 					},
@@ -96,7 +96,7 @@ export const correspondentOperations: INodeProperties[] = [
 	// Include pagination options for the get operation
 	...paginationOptions,
 
-	// Parameters for Create Correspondent operation
+	// Parameters for Create Tag operation
 	{
 		displayName: 'Name',
 		name: 'name',
@@ -104,12 +104,12 @@ export const correspondentOperations: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['createCorrespondent', 'updateCorrespondent'],
+				resource: ['tag'],
+				operation: ['createTag', 'updateTag'],
 			},
 		},
 		default: '',
-		description: 'The name of the correspondent',
+		description: 'The name of the tag',
 	},
 	{
 		displayName: 'Name',
@@ -117,12 +117,25 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['partialUpdateCorrespondent'],
+				resource: ['tag'],
+				operation: ['partialUpdateTag'],
 			},
 		},
 		default: undefined,
-		description: 'The name of the correspondent (optional for partial update)',
+		description: 'The name of the tag (optional for partial update)',
+	},
+	{
+		displayName: 'Color',
+		name: 'color',
+		type: 'color',
+		displayOptions: {
+			show: {
+				resource: ['tag'],
+				operation: ['createTag', 'updateTag', 'partialUpdateTag'],
+			},
+		},
+		default: undefined,
+		description: 'The color of the tag (hex color code, e.g., #FF0000)',
 	},
 	{
 		displayName: 'Match',
@@ -130,13 +143,13 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['createCorrespondent', 'updateCorrespondent', 'partialUpdateCorrespondent'],
+				resource: ['tag'],
+				operation: ['createTag', 'updateTag', 'partialUpdateTag'],
 			},
 		},
 		default: undefined,
 		description:
-			'A string that paperless will try to match against the content of documents to automatically assign this correspondent',
+			'A string that paperless will try to match against the content of documents to automatically assign this tag',
 	},
 	{
 		displayName: 'Matching Algorithm',
@@ -144,15 +157,15 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'options',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['createCorrespondent', 'updateCorrespondent', 'partialUpdateCorrespondent'],
+				resource: ['tag'],
+				operation: ['createTag', 'updateTag', 'partialUpdateTag'],
 			},
 		},
 		options: [
 			{
 				name: 'None',
 				value: 0,
-				description: 'Do not match documents to this correspondent automatically',
+				description: 'Do not match documents to this tag automatically',
 			},
 			{
 				name: 'Any',
@@ -186,7 +199,7 @@ export const correspondentOperations: INodeProperties[] = [
 			},
 		],
 		default: 0,
-		description: 'The algorithm used to match documents to this correspondent',
+		description: 'The algorithm used to match documents to this tag',
 	},
 	{
 		displayName: 'Case Insensitive',
@@ -194,44 +207,51 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'boolean',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: ['createCorrespondent', 'updateCorrespondent', 'partialUpdateCorrespondent'],
+				resource: ['tag'],
+				operation: ['createTag', 'updateTag', 'partialUpdateTag'],
 			},
 		},
 		default: false,
 		description: 'Whether matching should be case insensitive',
 	},
+	{
+		displayName: 'Is Inbox Tag',
+		name: 'isInboxTag',
+		type: 'boolean',
+		displayOptions: {
+			show: {
+				resource: ['tag'],
+				operation: ['createTag', 'updateTag', 'partialUpdateTag'],
+			},
+		},
+		default: false,
+		description: 'Whether this tag should be automatically assigned to new documents',
+	},
 
 	// Parameter for primary ID
 	{
-		displayName: 'Correspondent ID',
+		displayName: 'Tag ID',
 		name: 'id',
 		type: 'number',
 		required: true,
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
-				operation: [
-					'deleteCorrespondent',
-					'getCorrespondentById',
-					'updateCorrespondent',
-					'partialUpdateCorrespondent',
-					'get',
-				],
+				resource: ['tag'],
+				operation: ['deleteTag', 'getTagById', 'updateTag', 'partialUpdateTag', 'get'],
 			},
 		},
 		default: 0,
-		description: 'The ID of the correspondent to delete, get, or update',
+		description: 'The ID of the tag to delete, get, or update',
 	},
 
-	// Filtering Parameters for Get All Correspondents operation
+	// Filtering Parameters for Get All Tags operation
 	{
 		displayName: 'Full Permissions',
 		name: 'fullPerms',
 		type: 'boolean',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['tag'],
 				operation: ['get'],
 			},
 		},
@@ -244,12 +264,12 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['tag'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents by multiple IDs (comma-separated)',
+		description: 'Filter tags by multiple IDs (comma-separated)',
 	},
 	{
 		displayName: 'Name Contains',
@@ -257,12 +277,12 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['tag'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents where name contains this text (case-insensitive)',
+		description: 'Filter tags where name contains this text (case-insensitive)',
 	},
 	{
 		displayName: 'Name Ends With',
@@ -270,12 +290,12 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['tag'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents where name ends with this text (case-insensitive)',
+		description: 'Filter tags where name ends with this text (case-insensitive)',
 	},
 	{
 		displayName: 'Name Exact Match',
@@ -283,12 +303,12 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['tag'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents where name exactly matches this text (case-insensitive)',
+		description: 'Filter tags where name exactly matches this text (case-insensitive)',
 	},
 	{
 		displayName: 'Name Starts With',
@@ -296,11 +316,11 @@ export const correspondentOperations: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: ['tag'],
 				operation: ['get'],
 			},
 		},
 		default: undefined,
-		description: 'Filter correspondents where name starts with this text (case-insensitive)',
+		description: 'Filter tags where name starts with this text (case-insensitive)',
 	},
 ];

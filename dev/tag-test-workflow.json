@@ -1,0 +1,226 @@
+{
+  "name": "Tag Test Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Test Tag",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Color"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "be15f9dc-8e9c-42d5-b7a2-f60e4e1a0d0f",
+      "name": "On form submission",
+      "webhookId": "webhook-id"
+    },
+    {
+      "parameters": {
+        "resource": "tag",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "9323a15a-a302-4425-882f-6e923da92339",
+      "name": "Get all tags",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "tag",
+        "operation": "createTag",
+        "name": "={{ $('On form submission').item.json.Name }}",
+        "color": "={{ $('On form submission').item.json.Color || '#FF0000' }}",
+        "matchingAlgorithm": 1,
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "92c46968-7ee2-408f-bf0b-2aa916b6a22e",
+      "name": "Create a tag",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "tag",
+        "operation": "getTagById",
+        "id": "={{ $json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        640,
+        0
+      ],
+      "id": "89aff441-37d9-498a-9778-1361fee3ee21",
+      "name": "Get tag by id",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "tag",
+        "operation": "partialUpdateTag",
+        "color": "#00FF00",
+        "match": "updated matching",
+        "matchingAlgorithm": 3,
+        "isInsensitive": true,
+        "isInboxTag": true,
+        "id": "={{ $('Create a tag').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        848,
+        0
+      ],
+      "id": "4412b175-2e13-4383-8e04-f0a68a0402a8",
+      "name": "Partially update tag",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "tag",
+        "operation": "deleteTag",
+        "id": "={{ $('Create a tag').item.json.id }}",
+        "requestOptions": {}
+      },
+      "type": "CUSTOM.paperlessNgx",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        0
+      ],
+      "id": "bfd3895a-0787-43de-9beb-575664811d24",
+      "name": "Delete tag",
+      "credentials": {
+        "paperlessNgxApi": {
+          "id": "uFoM3j7aqgg7VBqu",
+          "name": "Paperless account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Name": "Test Tag",
+          "Color": "#FF0000",
+          "submittedAt": "2025-07-27T02:41:01.400-04:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Get all tags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all tags": {
+      "main": [
+        [
+          {
+            "node": "Create a tag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a tag": {
+      "main": [
+        [
+          {
+            "node": "Get tag by id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get tag by id": {
+      "main": [
+        [
+          {
+            "node": "Partially update tag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Partially update tag": {
+      "main": [
+        [
+          {
+            "node": "Delete tag",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7f77a20d-9125-4cc8-a4d0-e10e2a796212",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2bbe6a6701b06c3b222a1456bdb7f254c8c3e2061403cfdf66deefae520e02b2"
+  },
+  "id": "rq5BfNorLcIBNczD",
+  "tags": []
+}
