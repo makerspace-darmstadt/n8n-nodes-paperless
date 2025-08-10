@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-paperless",
+  "name": "@makerspacedarmstadt/n8n-nodes-paperless",
   "version": "0.1.0",
   "description": "A N8N community node package for PaperlessNGX",
   "keywords": [
@@ -10,7 +10,7 @@
   "homepage": "https://github.com/waza-ari/n8n-nodes-paperless",
   "author": {
     "name": "Daniel Herrmann",
-    "email": "danielherrmann@posteo.de"
+    "email": "it@makerspace-darmstadt.de"
   },
   "repository": {
     "type": "git",
@@ -37,7 +37,8 @@
       "dist/credentials/paperlessNgxApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/PaperlessNgx/PaperlessNgx.node.js"    ]
+      "dist/nodes/PaperlessNgx/PaperlessNgx.node.js"
+    ]
   },
   "devDependencies": {
     "@typescript-eslint/parser": "~8.32.0",
