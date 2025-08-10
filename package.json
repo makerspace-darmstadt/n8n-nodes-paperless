@@ -34,7 +34,7 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/paperlessNgxApi.credentials.js"
+      "dist/credentials/PaperlessNgxApi.credentials.js"
     ],
     "nodes": [
       "dist/nodes/PaperlessNgx/PaperlessNgx.node.js"
