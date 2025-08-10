@@ -1,6 +1,6 @@
 {
   "name": "@makerspacedarmstadt/n8n-nodes-paperless",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A N8N community node package for PaperlessNGX",
   "keywords": [
     "n8n-community-node-package",
