@@ -1,48 +1,60 @@
-![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
+﻿# n8n-nodes-paperless
 
-# n8n-nodes-starter
+This is an n8n community node. It lets you use Paperless-ngx in your n8n workflows.
 
-This repo contains example nodes to help you get started building your own custom integrations for [n8n](https://n8n.io). It includes the node linter and other dependencies.
+Paperless-ngx is an open-source document management system. This node lets you automate and sync core metadata entities (correspondents, tags, custom fields, document types, storage paths) around your documents. (Document CRUD/upload operations will be added later.)
 
-To make your custom node available to the community, you must create it as an npm package, and [submit it to the npm registry](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry).
+[n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
-If you would like your node to be available on n8n cloud you can also [submit your node for verification](https://docs.n8n.io/integrations/creating-nodes/deploy/submit-community-nodes/).
+[Installation](#installation)  
+[Operations](#operations)  
+[Credentials](#credentials)  
+[Compatibility](#compatibility)  
+[Resources](#resources)
 
-## Prerequisites
+## Installation
 
-You need the following installed on your development machine:
+Follow the n8n guide for installing community nodes: https://docs.n8n.io/integrations/community-nodes/installation/
 
-* [git](https://git-scm.com/downloads)
-* Node.js and npm. Minimum version Node 20. You can find instructions on how to install both using nvm (Node Version Manager) for Linux, Mac, and WSL [here](https://github.com/nvm-sh/nvm). For Windows users, refer to Microsoft's guide to [Install NodeJS on Windows](https://docs.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-windows).
-* Install n8n with:
-  ```
-  npm install n8n -g
-  ```
-* Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
+Install this package in your n8n instance (e.g. via UI) using its npm name once published.
 
-## Using this starter
+## Operations
 
-These are the basic steps for working with the starter. For detailed guidance on creating and publishing nodes, refer to the [documentation](https://docs.n8n.io/integrations/creating-nodes/).
+Current resources (document operations intentionally excluded for now):
 
-1. [Generate a new repository](https://github.com/n8n-io/n8n-nodes-starter/generate) from this template repository.
-2. Clone your new repo:
-   ```
-   git clone https://github.com/<your organization>/<your-repo-name>.git
-   ```
-3. Run `npm i` to install dependencies.
-4. Open the project in your editor.
-5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
-6. Update the `package.json` to match your details.
-7. Run `npm run lint` to check for errors or `npm run lintfix` to automatically fix errors when possible.
-8. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-9. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-10. Update the LICENSE file to use your details.
-11. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
+* Correspondent: Create, Get (list + filters), Get by ID, Update (PUT), Partial Update (PATCH), Delete
+* Tag: Create, Get (list + filters), Get by ID, Update (PUT), Partial Update (PATCH), Delete
+* Custom Field: Create (with select options), Get (list + filters), Get by ID, Update (PUT), Partial Update (PATCH), Delete
+* Document Type: Create, Get (list + filters), Get by ID, Update (PUT), Partial Update (PATCH), Delete
+* Storage Path: Create, Get (list + filters), Get by ID, Update (PUT), Partial Update (PATCH), Delete
 
-## More information
+Filtering & pagination support (where applicable): page, page size, ordering/sort, name-based filters, ID inclusion filters, and permission expansion (full permissions) for supported resources.
 
-Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
+## Credentials
 
-## License
+You need a Paperless-ngx API token and your instance base URL.
 
-[MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
+1. In Paperless-ngx, create an API token (User Settings → API Tokens).
+2. Add new credentials in n8n selecting "Paperless API" and supply:
+  * API Token
+  * Instance URL (e.g. https://paperless.example.com)
+
+All requests authenticate using an HTTP header: `Authorization: Token <token>`.
+
+## Compatibility
+
+Tested with:
+* n8n: >= 1.50 (NodeJS 20 runtime)
+* Paperless-ngx API: 2.7+ (endpoints for the listed resources)
+
+Should work with any recent Paperless-ngx version that exposes the same REST endpoints; open an issue if you find a mismatch.
+
+## Resources
+
+* n8n community nodes docs: https://docs.n8n.io/integrations/#community-nodes
+* Paperless-ngx API reference: https://docs.paperless-ngx.com/api/
+* Paperless-ngx project: https://github.com/paperless-ngx/paperless-ngx
+
+---
+
+Planned: add document upload/retrieval operations and richer search helpers in a future version.
