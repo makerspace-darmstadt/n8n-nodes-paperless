@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { paginationOptions } from './options';
+import { makePaginationOptions } from './options';
 import { documentTypeExpressions } from './utils';
 
 export const documentTypeOperations: INodeProperties[] = [
@@ -94,7 +94,7 @@ export const documentTypeOperations: INodeProperties[] = [
 		default: 'get',
 	},
 	// Include pagination options for the get operation
-	...paginationOptions,
+	...makePaginationOptions('documentType'),
 
 	// Parameters for Create Document Type operation
 	{
@@ -202,6 +202,48 @@ export const documentTypeOperations: INodeProperties[] = [
 		description: 'Whether matching should be case insensitive',
 	},
 
+	// Ownership and permissions
+	{
+		displayName: 'Owner User ID',
+		name: 'owner',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['documentType'],
+				operation: ['createDocumentType', 'updateDocumentType', 'partialUpdateDocumentType'],
+			},
+		},
+		default: undefined,
+		description: 'Numeric user ID to set as owner of this document type',
+	},
+	{
+		displayName: 'Set Permissions',
+		name: 'setPermissions',
+		type: 'json',
+		displayOptions: {
+			show: {
+				resource: ['documentType'],
+				operation: ['createDocumentType', 'updateDocumentType', 'partialUpdateDocumentType'],
+			},
+		},
+		default: '{"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+		description:
+			'Permissions object: {"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+	},
+	{
+		displayName: 'Note',
+		name: 'permissionsNote',
+		type: 'notice',
+		displayOptions: {
+			show: {
+				resource: ['documentType'],
+				operation: ['createDocumentType', 'updateDocumentType', 'partialUpdateDocumentType'],
+			},
+		},
+		default:
+			'Use the Users and Groups endpoints to look up IDs to use for owner and set_permissions. No user/group create/update/delete provided by this node.',
+	},
+
 	// Parameter for primary ID
 	{
 		displayName: 'Document Type ID',
@@ -220,7 +262,7 @@ export const documentTypeOperations: INodeProperties[] = [
 				],
 			},
 		},
-		default: 0,
+		default: null,
 		description: 'The ID of the document type to delete, get, or update',
 	},
 

@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { paginationOptions } from './options';
+import { makePaginationOptions } from './options';
 import { customFieldExpressions } from './utils';
 
 export const customFieldOperations: INodeProperties[] = [
@@ -94,7 +94,7 @@ export const customFieldOperations: INodeProperties[] = [
 		default: 'get',
 	},
 	// Include pagination options for the get operation
-	...paginationOptions,
+	...makePaginationOptions('customField'),
 
 	// Parameters for Create Custom Field operation
 	{
@@ -246,6 +246,48 @@ export const customFieldOperations: INodeProperties[] = [
 		description: 'Additional data for the custom field',
 	},
 
+	// Ownership and permissions
+	{
+		displayName: 'Owner User ID',
+		name: 'owner',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['customField'],
+				operation: ['createCustomField', 'updateCustomField', 'partialUpdateCustomField'],
+			},
+		},
+		default: undefined,
+		description: 'Numeric user ID to set as owner of this custom field',
+	},
+	{
+		displayName: 'Set Permissions',
+		name: 'setPermissions',
+		type: 'json',
+		displayOptions: {
+			show: {
+				resource: ['customField'],
+				operation: ['createCustomField', 'updateCustomField', 'partialUpdateCustomField'],
+			},
+		},
+		default: '{"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+		description:
+			'Permissions object: {"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+	},
+	{
+		displayName: 'Note',
+		name: 'permissionsNote',
+		type: 'notice',
+		displayOptions: {
+			show: {
+				resource: ['customField'],
+				operation: ['createCustomField', 'updateCustomField', 'partialUpdateCustomField'],
+			},
+		},
+		default:
+			'Use the Users and Groups endpoints to look up IDs to use for owner and set_permissions. No user/group create/update/delete provided by this node.',
+	},
+
 	// Parameter for primary ID
 	{
 		displayName: 'Custom Field ID',
@@ -264,7 +306,7 @@ export const customFieldOperations: INodeProperties[] = [
 				],
 			},
 		},
-		default: 0,
+		default: null,
 		description: 'The ID of the custom field to delete, get, or update',
 	},
 

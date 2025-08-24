@@ -1,13 +1,13 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-export const paginationOptions: INodeProperties[] = [
+export const makePaginationOptions = (resource: string): INodeProperties[] => [
 	{
 		displayName: 'Page',
 		name: 'page',
 		type: 'number',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: [resource],
 				operation: ['get'],
 			},
 		},
@@ -20,7 +20,7 @@ export const paginationOptions: INodeProperties[] = [
 		type: 'number',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: [resource],
 				operation: ['get'],
 			},
 		},
@@ -33,7 +33,7 @@ export const paginationOptions: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['correspondent'],
+				resource: [resource],
 				operation: ['get'],
 			},
 		},
@@ -41,3 +41,6 @@ export const paginationOptions: INodeProperties[] = [
 		description: 'Field to sort the results by',
 	},
 ];
+
+// Backward-compat export used by existing modules; bound to 'correspondent' only
+export const paginationOptions: INodeProperties[] = makePaginationOptions('correspondent');

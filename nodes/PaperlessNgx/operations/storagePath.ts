@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { paginationOptions } from './options';
+import { makePaginationOptions } from './options';
 import { storagePathExpressions } from './utils';
 
 export const storagePathOperations: INodeProperties[] = [
@@ -94,7 +94,7 @@ export const storagePathOperations: INodeProperties[] = [
 		default: 'get',
 	},
 	// Include pagination options for the get operation
-	...paginationOptions,
+	...makePaginationOptions('storagePath'),
 
 	// Parameters for Create Storage Path operation
 	{
@@ -229,6 +229,48 @@ export const storagePathOperations: INodeProperties[] = [
 		description: 'Whether matching should be case insensitive',
 	},
 
+	// Ownership and permissions
+	{
+		displayName: 'Owner User ID',
+		name: 'owner',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['storagePath'],
+				operation: ['createStoragePath', 'updateStoragePath', 'partialUpdateStoragePath'],
+			},
+		},
+		default: undefined,
+		description: 'Numeric user ID to set as owner of this storage path',
+	},
+	{
+		displayName: 'Set Permissions',
+		name: 'setPermissions',
+		type: 'json',
+		displayOptions: {
+			show: {
+				resource: ['storagePath'],
+				operation: ['createStoragePath', 'updateStoragePath', 'partialUpdateStoragePath'],
+			},
+		},
+		default: '{"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+		description:
+			'Permissions object: {"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+	},
+	{
+		displayName: 'Note',
+		name: 'permissionsNote',
+		type: 'notice',
+		displayOptions: {
+			show: {
+				resource: ['storagePath'],
+				operation: ['createStoragePath', 'updateStoragePath', 'partialUpdateStoragePath'],
+			},
+		},
+		default:
+			'Use the Users and Groups endpoints to look up IDs to use for owner and set_permissions. No user/group create/update/delete provided by this node.',
+	},
+
 	// Parameter for primary ID
 	{
 		displayName: 'Storage Path ID',
@@ -247,7 +289,7 @@ export const storagePathOperations: INodeProperties[] = [
 				],
 			},
 		},
-		default: 0,
+		default: null,
 		description: 'The ID of the storage path to delete, get, or update',
 	},
 

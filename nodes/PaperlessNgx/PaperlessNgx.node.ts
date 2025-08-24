@@ -4,6 +4,8 @@ import { documentTypeOperations } from './operations/documentType';
 import { storagePathOperations } from './operations/storagePath';
 import { tagOperations } from './operations/tag';
 import { customFieldOperations } from './operations/customField';
+import { userOperations } from './operations/user';
+import { groupOperations } from './operations/group';
 
 export class PaperlessNgx implements INodeType {
 	description: INodeTypeDescription = {
@@ -36,6 +38,13 @@ export class PaperlessNgx implements INodeType {
 		properties: [
 			// Resources and operations will go here
 			{
+				displayName: 'Note',
+				name: 'globalPermissionsNote',
+				type: 'notice',
+				default:
+					'Owner and permissions fields accept numeric IDs. Retrieve available Users (/api/users/) and Groups (/api/groups/) using the provided node.',
+			},
+			{
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
@@ -54,12 +63,20 @@ export class PaperlessNgx implements INodeType {
 						value: 'documentType',
 					},
 					{
+						name: 'Group',
+						value: 'group',
+					},
+					{
 						name: 'Storage Path',
 						value: 'storagePath',
 					},
 					{
 						name: 'Tag',
 						value: 'tag',
+					},
+					{
+						name: 'User',
+						value: 'user',
 					},
 				],
 				default: 'correspondent',
@@ -69,6 +86,8 @@ export class PaperlessNgx implements INodeType {
 			...storagePathOperations,
 			...tagOperations,
 			...customFieldOperations,
+			...userOperations,
+			...groupOperations,
 		],
 	};
 }

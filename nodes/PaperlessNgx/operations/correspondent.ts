@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { paginationOptions } from './options';
+import { makePaginationOptions } from './options';
 import { correspondentExpressions } from './utils';
 
 export const correspondentOperations: INodeProperties[] = [
@@ -94,7 +94,7 @@ export const correspondentOperations: INodeProperties[] = [
 		default: 'get',
 	},
 	// Include pagination options for the get operation
-	...paginationOptions,
+	...makePaginationOptions('correspondent'),
 
 	// Parameters for Create Correspondent operation
 	{
@@ -202,6 +202,48 @@ export const correspondentOperations: INodeProperties[] = [
 		description: 'Whether matching should be case insensitive',
 	},
 
+	// Ownership and permissions
+	{
+		displayName: 'Owner User ID',
+		name: 'owner',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['correspondent'],
+				operation: ['createCorrespondent', 'updateCorrespondent', 'partialUpdateCorrespondent'],
+			},
+		},
+		default: undefined,
+		description: 'Numeric user ID to set as owner of this correspondent',
+	},
+	{
+		displayName: 'Set Permissions',
+		name: 'setPermissions',
+		type: 'json',
+		displayOptions: {
+			show: {
+				resource: ['correspondent'],
+				operation: ['createCorrespondent', 'updateCorrespondent', 'partialUpdateCorrespondent'],
+			},
+		},
+		default: '{"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+		description:
+			'Permissions object: {"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+	},
+	{
+		displayName: 'Note',
+		name: 'permissionsNote',
+		type: 'notice',
+		displayOptions: {
+			show: {
+				resource: ['correspondent'],
+				operation: ['createCorrespondent', 'updateCorrespondent', 'partialUpdateCorrespondent'],
+			},
+		},
+		default:
+			'Use the Users and Groups endpoints to look up IDs to use for owner and set_permissions. No user/group create/update/delete provided by this node.',
+	},
+
 	// Parameter for primary ID
 	{
 		displayName: 'Correspondent ID',
@@ -220,7 +262,7 @@ export const correspondentOperations: INodeProperties[] = [
 				],
 			},
 		},
-		default: 0,
+		default: null,
 		description: 'The ID of the correspondent to delete, get, or update',
 	},
 

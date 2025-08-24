@@ -124,12 +124,15 @@ export const commonParameterMappings = {
  */
 export const correspondentExpressions = {
 	// Body expression for create/update operations
-	body: createFilteredBodyExpression({
-		name: 'name',
-		match: 'match',
-		matching_algorithm: 'matchingAlgorithm',
-		is_insensitive: 'isInsensitive',
-	}),
+	body:
+		`={{Object.fromEntries(Object.entries({
+			name: $parameter.name,
+			match: $parameter.match,
+			matching_algorithm: $parameter.matchingAlgorithm,
+			is_insensitive: $parameter.isInsensitive,
+			owner: $parameter.owner,
+			set_permissions: (typeof $parameter.setPermissions === 'string' && $parameter.setPermissions.trim() !== "") ? JSON.parse($parameter.setPermissions) : undefined,
+		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
 
 	// Query string parameters for get operations (correspondents have permissions and name filtering)
 	query: createNameFilteredResourceExpression(true),
@@ -140,12 +143,15 @@ export const correspondentExpressions = {
  */
 export const documentTypeExpressions = {
 	// Body expression for create/update operations
-	body: createFilteredBodyExpression({
-		name: 'name',
-		match: 'match',
-		matching_algorithm: 'matchingAlgorithm',
-		is_insensitive: 'isInsensitive',
-	}),
+	body:
+		`={{Object.fromEntries(Object.entries({
+			name: $parameter.name,
+			match: $parameter.match,
+			matching_algorithm: $parameter.matchingAlgorithm,
+			is_insensitive: $parameter.isInsensitive,
+			owner: $parameter.owner,
+			set_permissions: (typeof $parameter.setPermissions === 'string' ? ($parameter.setPermissions.trim() ? JSON.parse($parameter.setPermissions) : undefined) : $parameter.setPermissions),
+		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
 
 	// Query string parameters for get operations (document types have permissions and name filtering)
 	query: createNameFilteredResourceExpression(true),
@@ -156,13 +162,16 @@ export const documentTypeExpressions = {
  */
 export const storagePathExpressions = {
 	// Body expression for create/update operations
-	body: createFilteredBodyExpression({
-		name: 'name',
-		path: 'path',
-		match: 'match',
-		matching_algorithm: 'matchingAlgorithm',
-		is_insensitive: 'isInsensitive',
-	}),
+	body:
+		`={{Object.fromEntries(Object.entries({
+			name: $parameter.name,
+			path: $parameter.path,
+			match: $parameter.match,
+			matching_algorithm: $parameter.matchingAlgorithm,
+			is_insensitive: $parameter.isInsensitive,
+			owner: $parameter.owner,
+			set_permissions: (typeof $parameter.setPermissions === 'string' ? ($parameter.setPermissions.trim() ? JSON.parse($parameter.setPermissions) : undefined) : $parameter.setPermissions),
+		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
 
 	// Query string parameters for get operations (storage paths have permissions and name/path filtering)
 	query: createResourceQueryExpression(
@@ -182,14 +191,17 @@ export const storagePathExpressions = {
  */
 export const tagExpressions = {
 	// Body expression for create/update operations
-	body: createFilteredBodyExpression({
-		name: 'name',
-		color: 'color',
-		match: 'match',
-		matching_algorithm: 'matchingAlgorithm',
-		is_insensitive: 'isInsensitive',
-		is_inbox_tag: 'isInboxTag',
-	}),
+	body:
+		`={{Object.fromEntries(Object.entries({
+			name: $parameter.name,
+			color: $parameter.color,
+			match: $parameter.match,
+			matching_algorithm: $parameter.matchingAlgorithm,
+			is_insensitive: $parameter.isInsensitive,
+			is_inbox_tag: $parameter.isInboxTag,
+			owner: $parameter.owner,
+			set_permissions: (typeof $parameter.setPermissions === 'string' ? ($parameter.setPermissions.trim() ? JSON.parse($parameter.setPermissions) : undefined) : $parameter.setPermissions),
+		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
 
 	// Query string parameters for get operations (tags have permissions and name filtering)
 	query: createNameFilteredResourceExpression(true),
@@ -200,7 +212,14 @@ export const tagExpressions = {
  */
 export const customFieldExpressions = {
 	// Body expression for create/update operations with special handling for select fields
-	body: `={{Object.fromEntries(Object.entries({name: $parameter.name, data_type: $parameter.dataType, extra_data: $parameter.dataType === 'select' && $parameter.selectOptions ? {select_options: $parameter.selectOptions.values || []} : $parameter.extraData}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
+	body:
+		`={{Object.fromEntries(Object.entries({
+			name: $parameter.name,
+			data_type: $parameter.dataType,
+			extra_data: $parameter.dataType === 'select' && $parameter.selectOptions ? {select_options: $parameter.selectOptions.values || []} : $parameter.extraData,
+			owner: $parameter.owner,
+			set_permissions: (typeof $parameter.setPermissions === 'string' ? ($parameter.setPermissions.trim() ? JSON.parse($parameter.setPermissions) : undefined) : $parameter.setPermissions),
+		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
 
 	// Query string parameters for get operations (custom fields have name filtering but no permissions)
 	query: createNameFilteredResourceExpression(false),

@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { paginationOptions } from './options';
+import { makePaginationOptions } from './options';
 import { tagExpressions } from './utils';
 
 export const tagOperations: INodeProperties[] = [
@@ -94,7 +94,7 @@ export const tagOperations: INodeProperties[] = [
 		default: 'get',
 	},
 	// Include pagination options for the get operation
-	...paginationOptions,
+	...makePaginationOptions('tag'),
 
 	// Parameters for Create Tag operation
 	{
@@ -228,6 +228,48 @@ export const tagOperations: INodeProperties[] = [
 		description: 'Whether this tag should be automatically assigned to new documents',
 	},
 
+	// Ownership and permissions
+	{
+		displayName: 'Owner User ID',
+		name: 'owner',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['tag'],
+				operation: ['createTag', 'updateTag', 'partialUpdateTag'],
+			},
+		},
+		default: undefined,
+		description: 'Numeric user ID to set as owner of this tag',
+	},
+	{
+		displayName: 'Set Permissions',
+		name: 'setPermissions',
+		type: 'json',
+		displayOptions: {
+			show: {
+				resource: ['tag'],
+				operation: ['createTag', 'updateTag', 'partialUpdateTag'],
+			},
+		},
+		default: '{"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+		description:
+			'Permissions object: {"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}',
+	},
+	{
+		displayName: 'Note',
+		name: 'permissionsNote',
+		type: 'notice',
+		displayOptions: {
+			show: {
+				resource: ['tag'],
+				operation: ['createTag', 'updateTag', 'partialUpdateTag'],
+			},
+		},
+		default:
+			'Use the Users and Groups endpoints to look up IDs to use for owner and set_permissions. No user/group create/update/delete provided by this node.',
+	},
+
 	// Parameter for primary ID
 	{
 		displayName: 'Tag ID',
@@ -240,7 +282,7 @@ export const tagOperations: INodeProperties[] = [
 				operation: ['deleteTag', 'getTagById', 'updateTag', 'partialUpdateTag', 'get'],
 			},
 		},
-		default: 0,
+		default: null,
 		description: 'The ID of the tag to delete, get, or update',
 	},
 
