@@ -1,37 +1,4 @@
 /**
- * Utility functions and expressions for n8n node operations
- */
-
-/**
- * Filters out null, undefined, and empty string values from an object
- * This is useful for API requests where you only want to send defined parameters
- */
-export const filterDefinedValues = (obj: Record<string, any>): Record<string, any> => {
-	return Object.fromEntries(
-		Object.entries(obj).filter(
-			([_, value]) =>
-				value !== null &&
-				value !== undefined &&
-				value !== '' &&
-				// For arrays, check if they're not empty
-				!(Array.isArray(value) && value.length === 0),
-		),
-	);
-};
-
-/**
- * Expression string for filtering defined values in n8n routing
- * This can be used in routing body expressions
- */
-export const createFilteredBodyExpression = (parameterMap: Record<string, string>): string => {
-	const parameterEntries = Object.entries(parameterMap)
-		.map(([key, paramName]) => `"${key}": $parameter.${paramName}`)
-		.join(', ');
-
-	return `={{ Object.fromEntries(Object.entries({${parameterEntries}}).filter(([key, value]) => value !== null && value !== undefined && value !== "")) }}`;
-};
-
-/**
  * Expression string for filtering query parameters in n8n routing
  */
 export const createFilteredQueryExpression = (
@@ -59,7 +26,7 @@ export const createResourceQueryExpression = (
 ): Record<string, string> => {
 	const params = {
 		...commonParameterMappings.pagination,
-		...(includePermissions ? commonParameterMappings.resourceSpecific.permissions : {}),
+		...(includePermissions ? commonParameterMappings.permissions : {}),
 		...(includeIdFiltering ? commonParameterMappings.idFiltering : {}),
 		...resourceSpecificParams,
 	};
@@ -78,7 +45,7 @@ export const createNameFilteredResourceExpression = (
 ): Record<string, string> => {
 	return createResourceQueryExpression(
 		{
-			...commonParameterMappings.resourceSpecific.nameFiltering,
+			...commonParameterMappings.nameFiltering,
 			...additionalParams,
 		},
 		includePermissions,
@@ -101,21 +68,17 @@ export const commonParameterMappings = {
 		id: 'id',
 		id__in: 'filterIdIn',
 	},
+	// Permission parameter (only for some resources like correspondents, document_types)
+	permissions: {
+		full_perms: 'fullPerms',
+	},
 
-	// Resource-specific parameter mappings
-	resourceSpecific: {
-		// Permission parameter (only for some resources like correspondents, document_types)
-		permissions: {
-			full_perms: 'fullPerms',
-		},
-
-		// Common name filtering (for resources that have name fields)
-		nameFiltering: {
-			name__icontains: 'nameContains',
-			name__iendswith: 'nameEndsWith',
-			name__iexact: 'nameExact',
-			name__istartswith: 'nameStartsWith',
-		},
+	// Common name filtering (for resources that have name fields)
+	nameFiltering: {
+		name__icontains: 'nameContains',
+		name__iendswith: 'nameEndsWith',
+		name__iexact: 'nameExact',
+		name__istartswith: 'nameStartsWith',
 	},
 };
 
@@ -124,15 +87,14 @@ export const commonParameterMappings = {
  */
 export const correspondentExpressions = {
 	// Body expression for create/update operations
-	body:
-		`={{Object.fromEntries(Object.entries({
+	body: `={{Object.fromEntries(Object.entries({
 			name: $parameter.name,
 			match: $parameter.match,
 			matching_algorithm: $parameter.matchingAlgorithm,
 			is_insensitive: $parameter.isInsensitive,
 			owner: $parameter.owner,
-			set_permissions: (typeof $parameter.setPermissions === 'string' && $parameter.setPermissions.trim() !== "") ? JSON.parse($parameter.setPermissions) : undefined,
-		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
+			set_permissions: typeof $parameter.setPermissions === 'string' && $parameter.setPermissions.isNotEmpty() ? $parameter.setPermissions.parseJson() : undefined,
+		}).filter(([_, v]) => v !== null && v !== undefined && v !== ""))}}`,
 
 	// Query string parameters for get operations (correspondents have permissions and name filtering)
 	query: createNameFilteredResourceExpression(true),
@@ -143,15 +105,14 @@ export const correspondentExpressions = {
  */
 export const documentTypeExpressions = {
 	// Body expression for create/update operations
-	body:
-		`={{Object.fromEntries(Object.entries({
+	body: `={{Object.fromEntries(Object.entries({
 			name: $parameter.name,
 			match: $parameter.match,
 			matching_algorithm: $parameter.matchingAlgorithm,
 			is_insensitive: $parameter.isInsensitive,
 			owner: $parameter.owner,
-			set_permissions: (typeof $parameter.setPermissions === 'string' ? ($parameter.setPermissions.trim() ? JSON.parse($parameter.setPermissions) : undefined) : $parameter.setPermissions),
-		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
+			set_permissions: typeof $parameter.setPermissions === 'string' && $parameter.setPermissions.isNotEmpty() ? $parameter.setPermissions.parseJson() : undefined,
+		}).filter(([_, v]) => v !== null && v !== undefined && v !== ""))}}`,
 
 	// Query string parameters for get operations (document types have permissions and name filtering)
 	query: createNameFilteredResourceExpression(true),
@@ -162,21 +123,20 @@ export const documentTypeExpressions = {
  */
 export const storagePathExpressions = {
 	// Body expression for create/update operations
-	body:
-		`={{Object.fromEntries(Object.entries({
+	body: `={{Object.fromEntries(Object.entries({
 			name: $parameter.name,
 			path: $parameter.path,
 			match: $parameter.match,
 			matching_algorithm: $parameter.matchingAlgorithm,
 			is_insensitive: $parameter.isInsensitive,
 			owner: $parameter.owner,
-			set_permissions: (typeof $parameter.setPermissions === 'string' ? ($parameter.setPermissions.trim() ? JSON.parse($parameter.setPermissions) : undefined) : $parameter.setPermissions),
-		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
+			set_permissions: typeof $parameter.setPermissions === 'string' && $parameter.setPermissions.isNotEmpty() ? $parameter.setPermissions.parseJson() : undefined,
+		}).filter(([_, v]) => v !== null && v !== undefined && v !== ""))}}`,
 
 	// Query string parameters for get operations (storage paths have permissions and name/path filtering)
 	query: createResourceQueryExpression(
 		{
-			...commonParameterMappings.resourceSpecific.nameFiltering,
+			...commonParameterMappings.nameFiltering,
 			path__icontains: 'pathContains',
 			path__iendswith: 'pathEndsWith',
 			path__iexact: 'pathExact',
@@ -191,8 +151,7 @@ export const storagePathExpressions = {
  */
 export const tagExpressions = {
 	// Body expression for create/update operations
-	body:
-		`={{Object.fromEntries(Object.entries({
+	body: `={{Object.fromEntries(Object.entries({
 			name: $parameter.name,
 			color: $parameter.color,
 			match: $parameter.match,
@@ -200,8 +159,8 @@ export const tagExpressions = {
 			is_insensitive: $parameter.isInsensitive,
 			is_inbox_tag: $parameter.isInboxTag,
 			owner: $parameter.owner,
-			set_permissions: (typeof $parameter.setPermissions === 'string' ? ($parameter.setPermissions.trim() ? JSON.parse($parameter.setPermissions) : undefined) : $parameter.setPermissions),
-		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
+			set_permissions: typeof $parameter.setPermissions === 'string' && $parameter.setPermissions.isNotEmpty() ? $parameter.setPermissions.parseJson() : undefined,
+		}).filter(([_, v]) => v !== null && v !== undefined && v !== ""))}}`,
 
 	// Query string parameters for get operations (tags have permissions and name filtering)
 	query: createNameFilteredResourceExpression(true),
@@ -212,14 +171,13 @@ export const tagExpressions = {
  */
 export const customFieldExpressions = {
 	// Body expression for create/update operations with special handling for select fields
-	body:
-		`={{Object.fromEntries(Object.entries({
+	body: `={{Object.fromEntries(Object.entries({
 			name: $parameter.name,
 			data_type: $parameter.dataType,
 			extra_data: $parameter.dataType === 'select' && $parameter.selectOptions ? {select_options: $parameter.selectOptions.values || []} : $parameter.extraData,
 			owner: $parameter.owner,
-			set_permissions: (typeof $parameter.setPermissions === 'string' ? ($parameter.setPermissions.trim() ? JSON.parse($parameter.setPermissions) : undefined) : $parameter.setPermissions),
-		}).filter(([key, value]) => value !== null && value !== undefined && value !== ""))}}`,
+			set_permissions: typeof $parameter.setPermissions === 'string' && $parameter.setPermissions.isNotEmpty() ? $parameter.setPermissions.parseJson() : undefined,
+		}).filter(([_, v]) => v !== null && v !== undefined && v !== ""))}}`,
 
 	// Query string parameters for get operations (custom fields have name filtering but no permissions)
 	query: createNameFilteredResourceExpression(false),
