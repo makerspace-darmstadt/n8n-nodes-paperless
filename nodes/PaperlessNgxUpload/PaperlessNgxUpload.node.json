@@ -1,0 +1,4 @@
+{
+	"node": "dist/nodes/PaperlessNgxUpload/PaperlessNgxUpload.node.js",
+	"credentials": ["dist/credentials/PaperlessNgxApi.credentials.js"]
+}

@@ -182,3 +182,26 @@ export const customFieldExpressions = {
 	// Query string parameters for get operations (custom fields have name filtering but no permissions)
 	query: createNameFilteredResourceExpression(false),
 };
+
+/**
+ * Predefined expressions for document operations
+ */
+export const documentExpressions = {
+	// Query string parameters for get operations
+	query: createResourceQueryExpression(
+		{
+			title__icontains: 'titleContains',
+			content__icontains: 'contentContains',
+			tags__id__in: 'tagsIn',
+			document_type__id: 'documentTypeId',
+			correspondent__id: 'correspondentId',
+			storage_path__id: 'storagePathId',
+			archive_serial_number__icontains: 'asnContains',
+			created__date__gte: 'createdAfter',
+			created__date__lte: 'createdBefore',
+			modified__date__gte: 'modifiedAfter',
+			modified__date__lte: 'modifiedBefore',
+		},
+		true,
+	),
+};

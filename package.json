@@ -1,6 +1,6 @@
 {
 	"name": "@makerspacedarmstadt/n8n-nodes-paperless",
-	"version": "0.1.4",
+	"version": "0.2.0",
 	"description": "A N8N community node package for PaperlessNGX",
 	"keywords": [
 		"n8n-community-node-package",
@@ -39,7 +39,8 @@
 			"dist/credentials/PaperlessNgxApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/PaperlessNgx/PaperlessNgx.node.js"
+			"dist/nodes/PaperlessNgx/PaperlessNgx.node.js",
+			"dist/nodes/PaperlessNgxUpload/PaperlessNgxUpload.node.js"
 		]
 	},
 	"devDependencies": {
