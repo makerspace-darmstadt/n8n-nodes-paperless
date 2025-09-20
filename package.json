@@ -1,54 +1,57 @@
 {
-  "name": "@makerspacedarmstadt/n8n-nodes-paperless",
-  "version": "0.1.4",
-  "description": "A N8N community node package for PaperlessNGX",
-  "keywords": [
-    "n8n-community-node-package",
-    "paperless"
-  ],
-  "license": "MIT",
-  "homepage": "https://github.com/waza-ari/n8n-nodes-paperless",
-  "author": {
-    "name": "Daniel Herrmann",
-    "email": "it@makerspace-darmstadt.de"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/waza-ari/n8n-nodes-paperless.git"
-  },
-  "engines": {
-    "node": ">=20.15"
-  },
-  "main": "index.js",
-  "scripts": {
-    "build": "npx rimraf dist && tsc && gulp build:icons",
-    "dev": "tsc --watch",
-    "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes credentials package.json",
-    "lintfix": "eslint nodes credentials package.json --fix",
-    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
-  },
-  "files": [
-    "dist"
-  ],
-  "n8n": {
-    "n8nNodesApiVersion": 1,
-    "credentials": [
-      "dist/credentials/PaperlessNgxApi.credentials.js"
-    ],
-    "nodes": [
-      "dist/nodes/PaperlessNgx/PaperlessNgx.node.js"
-    ]
-  },
-  "devDependencies": {
-    "@typescript-eslint/parser": "~8.32.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-n8n-nodes-base": "^1.16.3",
-    "gulp": "^5.0.0",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
-  },
-  "peerDependencies": {
-    "n8n-workflow": "*"
-  }
+	"name": "@makerspacedarmstadt/n8n-nodes-paperless",
+	"version": "0.1.4",
+	"description": "A N8N community node package for PaperlessNGX",
+	"keywords": [
+		"n8n-community-node-package",
+		"paperless"
+	],
+	"license": "MIT",
+	"homepage": "https://github.com/waza-ari/n8n-nodes-paperless",
+	"author": {
+		"name": "Daniel Herrmann",
+		"email": "it@makerspace-darmstadt.de"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/waza-ari/n8n-nodes-paperless.git"
+	},
+	"engines": {
+		"pnpm": ">=9.1",
+		"node": ">=20.15"
+	},
+	"main": "index.js",
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"credentials": [
+			"dist/credentials/PaperlessNgxApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/PaperlessNgx/PaperlessNgx.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "*",
+		"@parcel/watcher": "^2.5.1",
+		"@types/node": "^24.3.1",
+		"eslint": "9.32.0",
+		"prettier": "3.6.2",
+		"release-it": "^19.0.4",
+		"typescript": "5.9.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
 }
